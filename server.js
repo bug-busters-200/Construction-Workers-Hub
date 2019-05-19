@@ -203,7 +203,9 @@ app.get('/workerPage', authenticateWorker, function(req, res) {
 });
 
 app.get('/engineerPage', authenticateEngineer, function(req, res) {
-	const user = req.body.user;
+	const username = req.body.username;
+	// const username = data.username;
+
 	engineer
 		.findOne({ where: { id: user.id } })
 		.then(function(user) {
