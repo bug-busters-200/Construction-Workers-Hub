@@ -9,16 +9,18 @@ const { engineer, worker } = require('./database/models');
 const app = express();
 const port = process.env.PORT || 5000;
 
-//Middleware
+//things to install
+//npm i bcrypt
+//npm i cors --save
+//npm install body-parser --save
+// npm install --save bluebird
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-// app.get('/', function(req, res) {
-// 	res.send('Hello World!');
-// });
 
-//Create new user in the database
 app.post('/signupEngineer', function(req, res) {
 	let fullname = req.body.fullname;
 	let username = req.body.username;
@@ -78,6 +80,7 @@ app.post('/signupWorker', function(req, res) {
 	const expectedSalary = req.body.expectedsalary;
 	const phoneNumber = req.body.phonenumber;
 	const role = req.body.role;
+	const status = req.body.status;
 	const hashedPassword = bcrypt.hashSync(password, 10);
 
 	worker
@@ -88,6 +91,7 @@ app.post('/signupWorker', function(req, res) {
 			experienceLevel: experienceLevel,
 			expectedSalary: expectedSalary,
 			phoneNumber: phoneNumber,
+			status : status,
 			role: role
 		})
 		.then(function() {
@@ -194,6 +198,7 @@ app.get('/workerPage', authenticateWorker, function(req, res) {
 				experienceLevel: user.experienceLevel,
 				expectedSalary: user.expectedSalary,
 				phoneNumber: user.phoneNumber,
+				status : user.status,
 				role: user.role
 			});
 		})
@@ -203,9 +208,7 @@ app.get('/workerPage', authenticateWorker, function(req, res) {
 });
 
 app.get('/engineerPage', authenticateEngineer, function(req, res) {
-	const username = req.body.username;
-	// const username = data.username;
-
+	const user = req.body.user;
 	engineer
 		.findOne({ where: { id: user.id } })
 		.then(function(user) {
@@ -215,6 +218,168 @@ app.get('/engineerPage', authenticateEngineer, function(req, res) {
 			return res.status(500).send(err);
 		});
 });
+
+
+
+
+//will filter out  from database by server
+
+// app.get('/role', function(req, res) {
+// const workerArr =[];
+// 	const Role = req.body.role;
+// 	worker
+// 		.findAll({ where: { role : Role } })
+// 		.then(function(users) {
+
+// users.forEach(function(user) {
+//       workerArr.push({ fullName: user.fullName,
+// 				experienceLevel: user.experienceLevel,
+// 				expectedSalary: user.expectedSalary,
+// 				phoneNumber: user.phoneNumber,
+// 				status : user.status,
+// 				role: user.role});
+//     });
+// return res.send({workerArr});
+
+// 		})
+// 		.catch(function(err) {
+// 			return res.status(500).send(err);
+// 		});
+// });
+
+// app.listen(port, function() {
+// 	console.log(`app listening on port ${port}!`);
+// });
+
+
+
+
+
+app.get('/smith', function(req, res) {
+	const Role = 'smith';
+	const workerArr = []
+	worker
+		.findAll({ where: { role : Role } })
+		.then(function(users) {
+			
+
+  users.forEach(function(user) {
+      workerArr.push({ fullName: user.fullName,
+				experienceLevel: user.experienceLevel,
+				expectedSalary: user.expectedSalary,
+				phoneNumber: user.phoneNumber,
+				status : user.status,
+				role: user.role});
+    });
+      return res.send({workerArr});
+
+		})
+		.catch(function(err) {
+			return res.status(500).send(err);
+		});
+});
+
+
+
+app.get('/carpenter', function(req, res) {
+	const Role = 'carpenter';
+	const workerArr = [];
+
+	worker
+		.findAll({ where: { role : Role } })
+		.then(function(users) {
+			
+  users.forEach(function(user) {
+      workerArr.push({ fullName: user.fullName,
+				experienceLevel: user.experienceLevel,
+				expectedSalary: user.expectedSalary,
+				phoneNumber: user.phoneNumber,
+				status : user.status,
+				role: user.role});
+    });
+      return res.send({workerArr});
+		})
+		.catch(function(err) {
+			return res.status(500).send(err);
+		});
+});
+
+
+
+app.get('/stoneBuilder', function(req, res) {
+	const Role = 'stoneBuilder';
+	const workerArr = [];
+
+	worker
+		.findAll({ where: { role : Role } })
+		.then(function(users) {
+				
+  users.forEach(function(user) {
+      workerArr.push({ fullName: user.fullName,
+				experienceLevel: user.experienceLevel,
+				expectedSalary: user.expectedSalary,
+				phoneNumber: user.phoneNumber,
+				status : user.status,
+				role: user.role});
+    });
+      return res.send({workerArr});
+		})
+		.catch(function(err) {
+			return res.status(500).send(err);
+		});
+});
+
+
+
+app.get('/painter', function(req, res) {
+	const Role = 'painter';
+	const workerArr = [];
+
+	worker
+		.findAll({ where: { role : Role } })
+		.then(function(users) {
+
+  users.forEach(function(user) {
+      workerArr.push({ fullName: user.fullName,
+				experienceLevel: user.experienceLevel,
+				expectedSalary: user.expectedSalary,
+				phoneNumber: user.phoneNumber,
+				status : user.status,
+				role: user.role});
+    });
+      return res.send({workerArr});		})
+		.catch(function(err) {
+			return res.status(500).send(err);
+		});
+});
+
+
+
+app.get('/engineerworker', function(req, res) {
+	const Role = req.body.username;
+	const workerArr = [];
+
+	worker
+		.findAll({ where: { userName : username } })
+		.then(function(users) {
+
+  users.forEach(function(user) {
+      workerArr.push({ fullName: user.fullName,
+				experienceLevel: user.experienceLevel,
+				expectedSalary: user.expectedSalary,
+				phoneNumber: user.phoneNumber,
+				status : user.status,
+				role: user.role});
+    });
+      return res.send({workerArr});
+      		})
+		.catch(function(err) {
+			return res.status(500).send(err);
+		});
+});
+
+
+
 
 app.listen(port, function() {
 	console.log(`app listening on port ${port}!`);
